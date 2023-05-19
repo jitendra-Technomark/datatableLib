@@ -1,0 +1,83 @@
+/* DataTable.module.css */
+
+.container {
+    margin: 20px;
+  }
+  
+  .exportButtons {
+    margin-bottom: 10px;
+  }
+  
+  .exportButton {
+    margin-right: 10px;
+    margin-left: 5px;
+  }
+  
+  .csv_Btn{
+    text-decoration: none;
+    color: black;
+  }
+  
+  .input {
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  .table th {
+    background-color: #f2f2f2;
+    cursor: pointer;
+  }
+  
+  .table th span {
+    margin-left: 5px;
+  }
+  
+  .table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .pagination {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .pagination button {
+    padding: 5px 10px;
+    margin-right: 5px;
+    background-color: #f2f2f2;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .activePage {
+    font-weight: bold;
+  }  
+
+  .pagination {
+    margin-top: 10px;
+  }
+  
+  .pagination select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
