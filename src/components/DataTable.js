@@ -6,7 +6,7 @@ import styles from './DataTable.module.css';
 
 class DataTable extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       searchTerm: '',
       filteredData: props.data,
@@ -15,7 +15,6 @@ class DataTable extends React.Component {
       sortingColumn: '',
       sortingOrder: 'asc',
     };
-
   }
 
   handleSort = (column) => {
@@ -53,7 +52,7 @@ class DataTable extends React.Component {
     });
   };
 
-
+  // Method for searching
   handleSearch = (e) => {
     const searchTerm = e.target.value;
     this.setState({ searchTerm }, () => {
@@ -70,7 +69,6 @@ class DataTable extends React.Component {
     this.setState({ itemsPerPage });
   };
 
-
   filterData = (searchTerm) => {
     const { data } = this.props;
     const filteredData = data.filter((item) => {
@@ -85,6 +83,7 @@ class DataTable extends React.Component {
     this.setState({ filteredData });
   };
 
+  // Method for exporting CSV
   exportToCSV = () => {
     const { filteredData } = this.state;
     const { headers } = this.props;
@@ -100,6 +99,7 @@ class DataTable extends React.Component {
     return csvData;
   };
 
+  // Method for exporting PDF
   exportToPDF = () => {
     const { filteredData } = this.state;
     const { headers } = this.props;
@@ -122,7 +122,7 @@ class DataTable extends React.Component {
       currentPage,
       itemsPerPage,
     } = this.state;
-    const { headers } = this.props;
+    const { headers, header, footer } = this.props;
 
     // Pagination calculations
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -135,11 +135,12 @@ class DataTable extends React.Component {
 
     return (
       <div className={styles.container}>
+
         <div className={styles.exportButtons}>
-          <button>
+          <button className={styles.exportButton}>
             <CSVLink
               data={this.exportToCSV()}
-              filename='data.csv'
+              filename="data.csv"
               className={`${styles.exportButton} ${styles.csv_Btn}`}
             >
               Export CSV
@@ -148,19 +149,29 @@ class DataTable extends React.Component {
 
           <button
             onClick={this.exportToPDF}
-            className={styles.exportButton}
+            className={`${styles.exportButton} ${styles.pdf_Btn}`}
           >
             Export PDF
           </button>
         </div>
 
         <input
-          type='text'
+          type="text"
           value={searchTerm}
           onChange={this.handleSearch}
-          placeholder='Search...'
+          placeholder="Search..."
           className={styles.input}
         />
+
+        {header && (
+          <div className={styles.header}>
+            {typeof header === 'string' ? (
+              <span className={styles.headerText}>{header}</span>
+            ) : (
+              header
+            )}
+          </div>
+        )}
 
         <table className={styles.table}>
           <thead>
@@ -169,7 +180,9 @@ class DataTable extends React.Component {
                 <th key={header} onClick={() => this.handleSort(header)}>
                   {header}
                   {this.state.sortingColumn === header && (
-                    <span>{this.state.sortingOrder === 'asc' ? '▲' : '▼'}</span>
+                    <span>
+                      {this.state.sortingOrder === 'asc' ? '▲' : '▼'}
+                    </span>
                   )}
                 </th>
               ))}
@@ -180,7 +193,18 @@ class DataTable extends React.Component {
             {currentItems.map((item, index) => (
               <tr key={index}>
                 {headers.map((header) => (
-                  <td key={header}>{item[header]}</td>
+                  <td key={header}>
+                    {typeof item[header] === 'string' &&
+                      item[header].startsWith('http') ? (
+                      <img
+                        src={item[header]}
+                        alt="Item"
+                        className={styles.image}
+                      />
+                    ) : (
+                      item[header]
+                    )}
+                  </td>
                 ))}
               </tr>
             ))}
@@ -212,7 +236,10 @@ class DataTable extends React.Component {
 
           {/* Custom pagination dropdown */}
           <div className={styles.pagination}>
-            <select value={itemsPerPage} onChange={this.handleItemsPerPageChange}>
+            <select
+              value={itemsPerPage}
+              onChange={this.handleItemsPerPageChange}
+            >
               <option value={10}>10</option>
               <option value={20}>20</option>
               <option value={50}>50</option>
@@ -226,6 +253,16 @@ class DataTable extends React.Component {
             Next
           </button>
         </div>
+
+        {footer && (
+          <div className={styles.footer}>
+            {typeof footer === 'string' ? (
+              <span className={styles.footerText}>{footer}</span>
+            ) : (
+              footer
+            )}
+          </div>
+        )}
       </div>
     );
   }
